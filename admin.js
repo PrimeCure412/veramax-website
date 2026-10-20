@@ -1,3 +1,21 @@
+// ==========================================
+// ADMIN ERP PANEL PASSWORD PROTECTION
+// ==========================================
+(function checkAdminAuth() {
+    const ADMIN_PASSWORD = "Veramax@2026"; // Aapka Password
+    
+    if (sessionStorage.getItem('vmax_admin_auth') !== 'true') {
+        let userPass = prompt("🔐 Veramax ERP Security:\nPlease enter the Admin Password to access dashboard:");
+        
+        if (userPass === ADMIN_PASSWORD) {
+            sessionStorage.setItem('vmax_admin_auth', 'true');
+            alert("✅ Access Granted! Welcome Rashid Hayat.");
+        } else {
+            alert("❌ Incorrect Password! Access Denied.");
+            window.location.href = "index.html";
+        }
+    }
+})();
 // Global variable for uploaded gift image filename
 let currentUploadedGiftImage = '';
 
