@@ -1,3 +1,18 @@
+<script>
+(function() {
+    const ADMIN_PASSWORD = "Veramax@2026";
+    if (sessionStorage.getItem('vmax_admin_auth') !== 'true') {
+        let userPass = prompt("🔐 Veramax ERP Security:\nPlease enter Admin Password:");
+        if (userPass === ADMIN_PASSWORD) {
+            sessionStorage.setItem('vmax_admin_auth', 'true');
+            alert("✅ Access Granted!");
+        } else {
+            alert("❌ Incorrect Password!");
+            window.location.href = "index.html";
+        }
+    }
+})();
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
