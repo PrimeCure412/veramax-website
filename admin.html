@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin ERP Dashboard - Veramax Healthcare</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Admin Specific Styling */
+        body { background: #f1f5f9; }
+        .admin-top-bar { background: #121212; color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ff6b00; flex-wrap: wrap; gap: 10px; }
+        .admin-nav-tabs { background: #1e1e1e; padding: 10px 30px; display: flex; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid #333; }
+        .tab-btn { background: #2d2d2d; color: #cbd5e1; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+        .tab-btn:hover, .tab-btn.active { background: #ff6b00; color: #fff; }
+        .admin-main-container { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
+        .tab-content { display: none; }
+        .tab-content.active-tab { display: block; animation: fadeIn 0.4s ease; }
+        .admin-card { background: #ffffff; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .admin-card h3 { color: #121212; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: #ff6b00; }
+        .table-style { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: left; }
+        .table-style th { background: #121212; color: #fff; padding: 12px 10px; font-size: 11px; text-transform: uppercase; }
+        .table-style td { padding: 10px; border-bottom: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
+        .table-style tr:nth-child(even) { background: #f8fafc; }
+        .action-btn { padding: 6px 12px; border-radius: 5px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; color: #fff; }
+        .view-btn { background: #16a34a; }
+        .edit-btn { background: #7c3aed; }
+        .delete-btn { background: #dc2626; }
+        .primary-submit-btn { background: #ff6b00; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .primary-submit-btn:hover { background: #e05e00; }
+    </style>
+</head>
+<body>
+
+    <!-- Admin Top Header -->
+    <header class="admin-top-bar">
+        <div>
+            <h2 style="font-size: 20px; color: #fff; margin: 0;"><i class="fa-solid fa-gear"></i> Veramax Healthcare - ERP Control Panel</h2>
+        </div>
+        <div>
+            <span style="font-size: 13px; color: #cbd5e1;">Director: <strong>Rashid Hayat</strong> (Ahmedabad)</span>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="admin-nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('manufacturerTab', this)"><i class="fa-solid fa-industry"></i> Manage Manufacturer</button>
+        <button class="tab-btn" onclick="switchTab('productTab', this)"><i class="fa-solid fa-pills"></i> Manage Product</button>
+        <button class="tab-btn" onclick="switchTab('purchaseTab', this)"><i class="fa-solid fa-box-archive"></i> Purchase & Enquiry Hub</button>
+        <button class="tab-btn" onclick="switchTab('billingTab', this)"><i class="fa-solid fa-file-invoice-dollar"></i> B2B GST Invoicing & Docs</button>
+        <button class="tab-btn" onclick="switchTab('schemeCalcTab', this)"><i class="fa-solid fa-calculator"></i> Scheme & Profit Calculator</button>
+        <a href="index.html" class="tab-btn" style="background: #0f172a;"><i class="fa-solid fa-globe"></i> View Live Website</a>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="admin-main-container">
+
+        <!-- TAB 1: MANAGE MANUFACTURER -->
+        <div id="manufacturerTab" class="tab-content active-tab">
+            <div class="admin-card">
+                <h3>Add New Manufacturer / Factory Unit</h3>
+                <form id="manufacturerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Factory / Company Name *</label>
+                            <input type="text" id="mfgName" placeholder="e.g. Apex Formulations Pvt Ltd" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person Name *</label>
+                            <input type="text" id="mfgPerson" placeholder="e.g. Mr. Rajesh Sharma" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email ID *</label>
+                            <input type="email" id="mfgEmail" placeholder="factory@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number *</label>
+                            <input type="tel" id="mfgMobile" placeholder="+91 9876543210" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary-submit-btn">Save Manufacturer</button>
+                </form>
+            </div>
+
+            <div class="admin-card">
+                <h3>Registered Manufacturers Directory</h3>
+                <div id="manufacturerListContainer">
+                    <p style="color: #777;">No manufacturers added yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: MANAGE PRODUCT -->
+        <div id="productTab" class="tab-content">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <button class="tab-btn" onclick="downloadProductList()" style="background: #0284c7;"><i class="fa-solid fa-download"></i> Download PCD List (Public)</button>
+                <button class="tab-btn" onclick="downloadPriceList()" style="background: #dc2626;"><i class="fa-solid fa-lock"></i> Download Private Price List</button>
+                <button class="tab-btn" onclick="downloadThirdPartyList()" style="background: #16a34a;"><i class="fa-solid fa-file-lines"></i> Download Third-Party Molecules</button>
+                <button class="tab-btn" onclick="toggleProductForm()" id="toggleFormBtn" style="background: #ff6b00; margin-left: auto;">+ Add New Product</button>
+            </div>
+
+            <!-- Add Product Form -->
+            <div class="admin-card" id="productFormCard" style="display: none;">
+                <h3>Add Product (Auto Code: <span id="autoProductCode" style="color: #ff6b00;">VM-0001</span>)</h3>
+                <form id="productForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Therapeutic / Product Category *</label>
+                            <select id="prodSegment" required>
+                                <option value="">Select Category</option>
+                                <option value="ANTIBACTERIAL/ANTIMICROBIAL/ANTIDIARRHOEALS/G.I.ANTIINFECTIONS">1. ANTIBACTERIAL/ANTIMICROBIAL/ANTIDIARRHOEALS/G.I.ANTIINFECTIONS</option>
+                                <option value="ANTI-HYPERACIDITY / REFLUX / ULCERS">2. ANTI-HYPERACIDITY / REFLUX / ULCERS</option>
+                                <option value="ANDROGENS AND ANABOLIC STEROIDS">3. ANDROGENS AND ANABOLIC STEROIDS</option>
+                                <option value="NSAIDS/ANTI-RHEUMATOID/SPASMODIC">4. NSAIDS/ANTI-RHEUMATOID/SPASMODIC</option>
+                                <option value="NUTRITION & METABOLISM/HEAMATOPOIETIC/MINERALS/VITAMINS">5. NUTRITION & METABOLISM/HEAMATOPOIETIC/MINERALS/VITAMINS</option>
+                                <option value="ENZYMES/DIGESTIVE SUPPLEMENTS">6. ENZYMES/DIGESTIVE SUPPLEMENTS</option>
+                                <option value="HAEMOSTATICS">7. HAEMOSTATICS</option>
+                                <option value="ANTICOLD/ANTIASTHMETICS/MUCOLYTICS/EXPECTORANTS">8. ANTICOLD/ANTIASTHMETICS/MUCOLYTICS/EXPECTORANTS</option>
+                                <option value="ANTIALLERGIC DRUGS">9. ANTIALLERGIC DRUGS</option>
+                                <option value="ANTHELMINTICS">10. ANTHELMINTICS</option>
+                                <option value="AYURVEDIC DRUGS">11. AYURVEDIC DRUGS</option>
+                                <option value="ANTIFUNGAL/ SKIN RANGE/DENTAL RANGE">12. ANTIFUNGAL/ SKIN RANGE/DENTAL RANGE</option>
+                                <option value="PSYCHIATRIC- DIVISION">13. PSYCHIATRIC- DIVISION</option>
+                                <option value="CARDIAC & DIABETIC">14. CARDIAC & DIABETIC</option>
+                                <option value="OPHTHALMIC">15. OPHTHALMIC</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Catalog List Type *</label>
+                            <select id="prodListType" required>
+                                <option value="PCD">PCD Product List</option>
+                                <option value="ThirdParty">Third-Party Manufacturing List</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Brand Name *</label>
+                            <input type="text" id="prodBrandName" placeholder="e.g. VeraVite-G Cap / Syrup" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Composition / Molecule *</label>
+                            <input type="text" id="prodComposition" placeholder="e.g. Ginseng, Multivitamins, Minerals & Antioxidants" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Formulation Type *</label>
+                            <select id="prodFormulation" required>
+                                <option value="Tablet">Tablet</option>
+                                <option value="Capsule">Capsule</option>
+                                <option value="Softgel">Softgel</option>
+                                <option value="Dry Injection">Dry Injection</option>
+                                <option value="Liquid Injection">Liquid Injection</option>
+                                <option value="Syrup">Syrup</option>
+                                <option value="Dry Syrup">Dry Syrup</option>
+                                <option value="Suspension">Suspension</option>
+                                <option value="Ointment">Ointment</option>
+                                <option value="Cream">Cream</option>
+                                <option value="Gel">Gel</option>
+                                <option value="Powder">Powder</option>
+                                <option value="Granules">Granules</option>
+                                <option value="Drops">Drops</option>
+                                <option value="Gummy">Gummy</option>
+                                <option value="Mouth Paint">Mouth Paint</option>
+                                <option value="Mouthwash">Mouthwash</option>
+                                <option value="Roll On">Roll On</option>
+                                <option value="Toothpaste">Toothpaste</option>
+                                <option value="Nasal Sprays & Drops">Nasal Sprays & Drops</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Packing (e.g. Alu-Alu / Bottle) *</label>
+                            <input type="text" id="prodPacking" placeholder="e.g. 10x10 Alu-Alu / 200ml Bottle" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pack Size *</label>
+                            <input type="text" id="prodPackSize" placeholder="e.g. 10 Capsules" required>
+                        </div>
+                        <div class="form-group">
+                            <label>MRP (₹) *</label>
+                            <input type="number" step="0.01" id="prodMrp" placeholder="250.00" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Distributor Rate / Price (₹) *</label>
+                            <input type="number" step="0.01" id="prodRate" placeholder="120.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>HSN Code *</label>
+                            <input type="text" id="prodHsnCode" placeholder="e.g. 3004 / 2106" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>GST Tax % *</label>
+                            <input type="text" id="prodGstTax" placeholder="e.g. 12% / 18%" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Linked Manufacturer *</label>
+                            <select id="prodManufacturer" required>
+                                <option value="">Select Manufacturer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Image Upload</label>
+                            <input type="file" id="prodImageFile" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Visual Aid Presentation Upload</label>
+                            <input type="file" id="prodVisualFile" accept="image/*,application/pdf">
+                        </div>
+                        <div class="form-group">
+                            <label>Banner Image Upload (Optional)</label>
+                            <input type="file" id="prodBannerFile" accept="image/*">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="primary-submit-btn" style="margin-top: 15px;">Save Product to Database</button>
+                </form>
+            </div>
+
+            <!-- Product Inventory Table -->
+            <div class="admin-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="margin: 0;">Product Catalog Inventory</h3>
+                    <input type="text" id="productSearchInput" onkeyup="filterAdminProductCatalog()" placeholder="🔍 Search brand, code, composition..." style="padding: 8px 12px; width: 280px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px;">
+                </div>
+                <div id="adminProductCatalogList" style="overflow-x: auto;">
+                    <p style="color: #777;">No products added yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PURCHASE & ENQUIRY HUB -->
+        <div id="purchaseTab" class="tab-content">
+            <div class="admin-card">
+                <h3>Purchase Order & Factory Enquiry Hub</h3>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Send inquiries directly to manufacturers from info.veramaxhealthcare@gmail.com</p>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Select Enquiry Mode:</label>
+                    <select id="enquiryMode" onchange="toggleEnquiryMode()">
+                        <option value="multipleProduct">1. Multiple Products to Single Manufacturer</option>
+                        <option value="singleProduct">2. Single Product to Multiple Manufacturers</option>
+                    </select>
+                </div>
+
+                <div id="mode1Container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select Manufacturer:</label>
+                            <select id="enquiryMfgSelect"><option value="">Select Manufacturer</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>Select Products:</label>
+                        <div id="checkboxProductList" style="max-height: 180px; overflow-y: auto; border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; background: #fff;"></div>
+                    </div>
+                    <button type="button" class="tab-btn" onclick="sendMultiProductEnquiry()" style="background: #ff6b00; color:#fff;">Send Enquiry Email ✉️</button>
+                </div>
+
+                <div id="mode2Container" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select Product:</label>
+                            <select id="enquiryProductSelect" onchange="loadLinkedManufacturersForProduct()"><option value="">Select Product</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>Linked Manufacturers:</label>
+                        <div id="checkboxMfgList" style="max-height: 180px; overflow-y: auto; border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; background: #fff;"></div>
+                    </div>
+                    <button type="button" class="tab-btn" onclick="sendSingleProductEnquiry()" style="background: #ff6b00; color:#fff;">Send Enquiry Email ✉️</button>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3>Enquiry & Comparison Logs</h3>
+                <div id="comparisonLogContainer"><p style="color: #777;">No enquiries sent yet.</p></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: B2B GST INVOICING & DOCUMENTS -->
+        <div id="billingTab" class="tab-content">
+            <div class="admin-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+                    <h3 style="margin: 0;">📄 Automated B2B Billing & Document Generator</h3>
+                    <span style="font-size: 12px; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-weight: 700;">Auto Serial Numbers</span>
+                </div>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Generate professional Proforma Invoices, Tax Invoices, and Purchase Orders instantly with zero manual typing.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Document Type:</label>
+                        <select id="docTypeSelect" onchange="updateDocNumberPreview()">
+                            <option value="proforma">Proforma Invoice (VMPI/26-27/0001)</option>
+                            <option value="taxInvoice">Tax Invoice (VMTI/26-27/0001)</option>
+                            <option value="purchaseOrder">Purchase Order (VMPP/26-27/0001)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Auto-Generated Serial Number:</label>
+                        <input type="text" id="autoDocNumberPreview" readonly style="background: #f8fafc; font-weight: bold; color: #ff6b00;">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Distributor / Party Name:</label>
+                        <input type="text" id="docPartyName" placeholder="e.g. Shri Balaji Pharma Distributors">
+                    </div>
+                    <div class="form-group">
+                        <label>Target District / Monopoly Area:</label>
+                        <input type="text" id="docMonopolyArea" placeholder="e.g. Ahmedabad / Surat">
+                    </div>
+                </div>
+
+                <!-- Multi-Product Selection Table with Custom Rate & Description -->
+                <div class="form-group" style="margin-top: 15px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="margin: 0; font-size: 14px; font-weight: bold;">Select Products, Custom Specs & Rates:</label>
+                        <button type="button" class="tab-btn" onclick="addBillingProductRow()" style="background: #ff6b00; padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Add Product Row</button>
+                    </div>
+                    <table class="table-style" id="billingProductsTable" style="margin-top: 5px;">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Product Name</th>
+                                <th style="width: 32%;">Custom Specification / Description</th>
+                                <th style="width: 15%;">Rate (₹)</th>
+                                <th style="width: 10%;">Qty</th>
+                                <th style="width: 8%;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billingProductsRowsContainer">
+                            <!-- Dynamic rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-row" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>Transport / LR Details (Dispatch Tracking):</label>
+                        <input type="text" id="docTransportDetails" placeholder="e.g. VRL Logistics | LR No: VRL-88921">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 15px;">
+                    <button type="button" class="tab-btn" onclick="generateAndPrintOfficialDocument()" style="background: #16a34a; flex: 1; justify-content: center;"><i class="fa-solid fa-print"></i> Generate & Print Official PDF Document</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: SCHEME & PROFIT CALCULATOR -->
+        <div id="schemeCalcTab" class="tab-content">
+            <div class="admin-card" style="border-top: 4px solid #ff6b00;">
+                <h3 style="color: #ff6b00;">🎁 Scheme, Profit Margin & Gift Calculator (Pro v2.5)</h3>
+                <form id="schemeCalcForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                    <div class="form-group">
+                        <label>Select Product:</label>
+                        <select id="calcProductSelect" onchange="loadProductCalcDetails()"><option value="">-- Choose Product --</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Order Qty (Units):</label>
+                        <input type="number" id="calcOrderQty" value="100" oninput="calculateSchemeProfit()">
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Rate / Unit (₹):</label>
+                        <input type="number" step="0.01" id="calcPurchaseRate" value="0" oninput="calculateSchemeProfit()">
+                    </div>
+                    <div class="form-group">
+                        <label>Selling Rate / Unit (₹):</label>
+                        <input type="number" step="0.01" id="calcSellingRate" value="0" oninput="calculateSchemeProfit()">
+                    </div>
+                    <div class="form-group">
+                        <label>Gift Item Offered:</label>
+                        <input type="text" id="calcGiftItem" placeholder="e.g. Executive Trolley Bag / Gold Coin">
+                    </div>
+                    <div class="form-group">
+                        <label>Gift Cost Expense (₹):</label>
+                        <input type="number" id="calcGiftCost" value="0" oninput="calculateSchemeProfit()" style="border: 2px solid #dc2626; font-weight: bold;">
+                    </div>
+                </form>
+
+                <!-- Results Box -->
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center;">
+                    <div><span style="font-size:11px; color:#64748b; font-weight:700;">TOTAL SALES</span><br><strong id="resTotalSales" style="font-size:16px; color:#121212;">₹0.00</strong></div>
+                    <div><span style="font-size:11px; color:#64748b; font-weight:700;">LANDED COST/UNIT</span><br><strong id="resLandedCost" style="font-size:16px; color:#121212;">₹0.00</strong></div>
+                    <div><span style="font-size:11px; color:#64748b; font-weight:700;">SAFE GIFT BUDGET</span><br><strong id="resGiftBudgetSuggest" style="font-size:16px; color:#0284c7;">₹0.00</strong></div>
+                    <div><span style="font-size:11px; color:#64748b; font-weight:700;">ACTUAL NET PROFIT</span><br><strong id="resNetProfit" style="font-size:18px; color:#16a34a;">₹0.00</strong></div>
+                    <div><span style="font-size:11px; color:#64748b; font-weight:700;">NET MARGIN %</span><br><strong id="resMarginPct" style="font-size:18px; color:#16a34a;">0.00%</strong></div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="button" class="tab-btn" onclick="saveSchemeCalculation()" style="background: #16a34a;"><i class="fa-solid fa-floppy-disk"></i> Save Scheme Entry</button>
+                    <button type="button" class="tab-btn" onclick="generateOwnerConfidentialSheet()" style="background: #dc2626;"><i class="fa-solid fa-lock"></i> Confidential Owner Sheet</button>
+                    <button type="button" class="tab-btn" onclick="generateClientPublicSchemeSheet()" style="background: #0284c7;"><i class="fa-solid fa-gift"></i> Client Scheme Catalog</button>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3>Saved Scheme Entries</h3>
+                <div id="savedSchemeListContainer"><p style="color: #777;">No saved schemes yet.</p></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>
